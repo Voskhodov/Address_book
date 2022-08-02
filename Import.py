@@ -1,6 +1,10 @@
+import os
 import pandas as pd
 from options import database
 import Export as ab_export
+
+#добавляет в текущий файл новые данные
+#ab_import.import_file("fio_import.csv")
 
 # загрузка данных
 # читаем CSV файл, возвращаем DataFrame
@@ -19,4 +23,18 @@ def import_file(filename):
     max_id = db["id"].max() + 1
     imported['id'] = range(max_id, max_id+len(imported))
     result = pd.concat([db, imported])
-    return ab_export.save_data(database, "csv", result)
+    ab_export.save_data(database, "csv", result)
+    return imported
+
+def import_data():
+    filename = ""
+    while len(filename) == 0:
+        filename = input("Введите имя CSV Файла для импорта:")
+        if not os.path.exists(filename):
+            print(f"Файл {filename} не существует!")
+            filename = ""
+        else:
+            df = import_file(filename)
+            print("%d учеников импортировано" % len(df))
+
+    return
