@@ -13,5 +13,5 @@ def add():
     newdf = pd.DataFrame(data, columns=columns)
     ab_import.import_data(newdf)
     print("Добавили запись:")
-    print(newdf)
+    print(newdf.to_string(index=False))
     return
