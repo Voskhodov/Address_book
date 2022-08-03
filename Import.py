@@ -12,21 +12,26 @@ import Export as ab_export
 def load_data(filename):
     return pd.read_csv(filename, sep=";")
 
+def load():
+    return load_data(database)
+
+def import_data(data):
+    db = load_data(database)
+    max_id = db["id"].max() + 1
+    data['id'] = range(max_id, max_id+len(data))
+    result = pd.concat([db, data])
+    ab_export.save_data(database, "csv", result)
+    return data
+
 # импорт
 # 1) зачитываем текущую базу
 # 2) добавляем новые данные (вопрос: нужна проверка на дубликаты?)
 # 3) при добавлении создаем новый уникальный id
 # 4) сохраняем в текущую базу 
 def import_file(filename):
-    db = load_data(database)
-    imported = load_data(filename)
-    max_id = db["id"].max() + 1
-    imported['id'] = range(max_id, max_id+len(imported))
-    result = pd.concat([db, imported])
-    ab_export.save_data(database, "csv", result)
-    return imported
+    return import_data(load_data(filename))
 
-def import_data():
+def importf():
     filename = ""
     while len(filename) == 0:
         filename = input("Введите имя CSV Файла для импорта:")
