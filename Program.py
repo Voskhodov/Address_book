@@ -6,14 +6,8 @@ import delete as ab_delete
 
 from options import database
 
-def load():
-    return ab_import.load_data(database)
-
-def save(data):
-    return ab_export.save_data(database, "csv", data)
-
 def list_data():
-    data = load()
+    data = ab_import.load()
     print(data.to_string())
     return
 
@@ -22,7 +16,7 @@ commands = {
     "2": ab_search.search,
     "3": ab_add.add,
     "4": ab_delete.delete,
-    "5": ab_import.import_data,
+    "5": ab_import.importf,
     "6": ab_export.export_data,
 }
 

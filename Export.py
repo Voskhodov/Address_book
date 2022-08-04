@@ -21,6 +21,9 @@ def write_file(target, str):
     with open(target, "w", encoding="utf-8") as f:
         return f.write(str)
 
+def save(data):
+    return save_data(database, "csv", data)
+
 # запись данных DataFrame в файл
 # mode: csv, excel, html, json, text
 # нет обработки ошибок

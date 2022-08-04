@@ -1,33 +1,17 @@
+import pandas as pd
+import Import as ab_import
 from options import database
 
-id=0
-# f_name=''
-# s_name=''
-# patr_name=''
-# birth_year=''
-# tel=0
-# status=''
-
 def add():
-    # здесь нужно спросить поля и добавить новые данные. Добавлено
-    # id = max(for id in len(str)) + 1 # как задать id?
-    f_name = input("Введите фамилию: ")
-    s_name = input("Введите имя: ")
-    patr_name = input("Введите отчество: ")
-    birth_year = input("Введите год рождения: ")
-    tel = input("Введите телефон: ")
-    status = input("Введите статус: ")
-    print('Добавили запись: {};{};{};{};{};{};{}'.format(id, f_name, s_name, patr_name, birth_year, tel, status))
-    path = database
-    with open(path,'a', encoding="utf-8") as data:
-        data.write('{};{};{};{};{};{};{}\n'
-        .format(id, f_name, s_name, patr_name, birth_year, tel, status))
-    return
+    columns = []
+    data = [[]]    
+    df = ab_import.load()
+    for column in df.columns:
+        columns.append(column)
+        data[0].append(-1 if column == "id" else input(f"Введите поле {column}: "))
 
-add()
-# def add_line():
-#     path = 'fio1.csv'
-#     with open(path,'a') as data:
-#         data.write('id:{};f_name:{};s_name:{};patr_name:{};birth_year:{};tel:{};status:{}\n'
-#         .format(id, f_name, s_name, patr_name, birth_year, tel, status))
-#     return
+    newdf = pd.DataFrame(data, columns=columns)
+    ab_import.import_data(newdf)
+    print("Добавили запись:")
+    print(newdf.to_string(index=False))
+    return
