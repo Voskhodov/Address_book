@@ -1,5 +1,23 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from options import database
+import csv
+from Program import list_data
+
+
+name = list(input('Введите Фамилию или Имя для поиска: '))
+
 def search():
-    # здесь нужно запросить данные для поиска и вывести список
-    # данные параметров поиска также можно использовать в функции удаления
-    print("Модуль не готов!")
-    return
+
+    with open('fio.csv', 'r', encoding='utf-8') as f:
+        search_data = csv.DictReader(f, str)
+        for row in search_data:
+            if name in row:
+                print(row)
+            else:
+                print("По заданным параметрам ничего не найдено")
+                return search
+    
+    return list_data
+
+# search(name)
