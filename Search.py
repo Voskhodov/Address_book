@@ -14,3 +14,4 @@ def search():
                 print(line)
             else:
                 print("По заданным параметрам ничего не найдено")
+                continue
