@@ -1,8 +1,11 @@
+from json import load
 import Import as ab_import
 import Export as ab_export
 import Search as ab_search
 import add as ab_add
 import delete as ab_delete
+from tkinter import ttk
+import tkinter
 
 from options import database
 
@@ -20,7 +23,32 @@ commands = {
     "6": ab_export.export_data,
 }
 
-def run():
+def run_gui():
+    ws = tkinter.Tk()
+    ws.title('Список пользователей')
+
+    df = ab_import.load()
+    columns = list(df.columns)
+    tree = ttk.Treeview(ws, columns=columns, show='headings', height=5)
+    tree.pack(fill='both', expand='yes')
+
+    tree['columns'] = columns
+    for col in columns:
+        tree.column(col, anchor='w')
+        tree.heading(col, text=col, anchor='w')
+
+    for label, data in df.iterrows():
+        tree.insert('', len(tree.get_children()), text=label, values=list(data))
+
+    # style = ttk.Style()
+    # style.theme_use("default")
+    # style.map("Treeview")
+
+    ws.mainloop()
+
+    return
+
+def run_console():
     while True:
         print("Что вы ходите сделать:")
         print("1. Вывести список учеников")

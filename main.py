@@ -1,3 +1,3 @@
 import Program
 
-Program.run()
+Program.run_gui()
