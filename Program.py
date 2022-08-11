@@ -1,11 +1,12 @@
 from json import load
+from turtle import width
 import Import as ab_import
 import Export as ab_export
 import Search as ab_search
 import add as ab_add
 import delete as ab_delete
 from tkinter import ttk
-import tkinter
+import tkinter as tk
 
 from options import database
 
@@ -28,30 +29,28 @@ def run_gui():
         inputValue=textSearch.get("1.0","end-1c")
         print(inputValue)
 
-    ws = tkinter.Tk()
+    ws = tk.Tk()
     ws.title('Список пользователей')
 
-    searchFrame=tkinter.Frame(ws)
-    searchFrame.pack(fill='both')
-    textSearch=tkinter.Text(searchFrame, height=1, width=100)
-    textSearch.pack(side='left', fill='both', expand='yes', padx=10, pady=5)
-    buttonSearch=tkinter.Button(searchFrame, height=1, width=10, text="Поиск", command=lambda: do_search())
-    buttonSearch.pack(side='right', padx=15, pady=5)
-
-    mainFrame=tkinter.Frame(ws)
-    mainFrame.pack(fill='both', expand='yes')
+    topFrame = tk.Frame(ws)
+    topFrame.pack(side='top', ipadx=5, ipady=5, fill='x')
+    textSearch=tk.Text(topFrame, height=1, width=100)
+    textSearch.pack(side ='left', padx=10)
+    buttonSearch=tk.Button(topFrame, height=1, width=10, text="Поиск", command=lambda: do_search())
+    buttonSearch.pack(side ='left', padx=5)
+    buttonAdd=tk.Button(topFrame, height=1, width=10, text="Добавить", command=lambda: do_search())
+    buttonAdd.pack(side ='left', padx=5)
+    buttonRemove=tk.Button(topFrame, height=1, width=10, text="Удалить", command=lambda: do_search())
+    buttonRemove.pack(side ='left', padx=5)
 
     df = ab_import.load()
     columns = list(df.columns)
-    tree = ttk.Treeview(mainFrame, columns=columns, show='headings', height=10)
-    tree.pack(fill='both', expand='yes')
-
-    buttonFrame=tkinter.Frame(mainFrame)
-    buttonFrame.pack(side='right')
-    buttonAdd=tkinter.Button(buttonFrame, height=1, width=10, text="Добавить", command=lambda: do_search())
-    buttonAdd.pack(side='bottom', padx=15, pady=5)
-    buttonRemove=tkinter.Button(buttonFrame, height=1, width=10, text="Удалить", command=lambda: do_search())
-    buttonRemove.pack(side='bottom', padx=15, pady=5)
+    tree = ttk.Treeview(ws, columns=columns, show='headings', selectmode ='browse')
+    tree.config(height=100)
+    tree.pack(side ='left')
+    vsb = ttk.Scrollbar(ws, orient ='vertical', command=tree.yview) 
+    vsb.pack(side='right', fill='y')
+    tree.configure(xscrollcommand=vsb.set)
 
     tree['columns'] = columns
     for col in columns:
