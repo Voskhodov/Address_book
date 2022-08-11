@@ -45,7 +45,7 @@ def run_gui():
             if len(inputValue):
                 result = Series([],dtype=StringDtype())
                 for column in df.columns:
-                    result = result | df[column].str.contains(inputValue)# if len(result) else df[column].str.contains(inputValue)
+                    result = result | df[column].str.contains(inputValue, na=False, case=False)
                 df = df[result]
             fill_data(tree, df)
         return
@@ -62,31 +62,31 @@ def run_gui():
     topFrame = tk.Frame(ws)
     topFrame.pack(side='top', ipadx=5, ipady=5, fill='x')
     textSearch=tk.Text(topFrame, height=1, width=100)
-    textSearch.pack(side ='left', padx=10)
+    textSearch.pack(side ='left', fill='x', expand='yes', padx=10)
     buttonSearch=tk.Button(topFrame, height=1, width=10, text="Поиск", command=lambda: do_command('search', textSearch.get("1.0","end-1c")))
     buttonSearch.pack(side ='left', padx=5)
     buttonAdd=tk.Button(topFrame, height=1, width=10, text="Добавить", state = 'disabled', command=lambda: do_add())
     buttonAdd.pack(side ='left', padx=5)
     buttonRemove=tk.Button(topFrame, height=1, width=10, text="Удалить", state = 'disabled', command=lambda: do_delete())
     buttonRemove.pack(side ='left', padx=5)
-    buttonExport=tk.Button(topFrame, height=1, width=10, text="Экспорт", state = 'disabled', command=lambda: do_delete())
-    buttonExport.pack(side ='left', padx=5)
     buttonImport=tk.Button(topFrame, height=1, width=10, text="Импорт", state = 'disabled', command=lambda: do_delete())
     buttonImport.pack(side ='left', padx=5)
+    buttonExport=tk.Button(topFrame, height=1, width=10, text="Экспорт", state = 'disabled', command=lambda: do_delete())
+    buttonExport.pack(side ='left', padx=5)
 
     df = ab_import.load()
     tree = ttk.Treeview(ws, columns=list(df.columns), show='headings', selectmode ='browse')
     tree.config(height=100)
-    tree.pack(side ='left')
+    tree.pack(side ='left', fill='both', expand='yes')
     vsb = ttk.Scrollbar(ws, orient ='vertical', command=tree.yview) 
     vsb.pack(side='right', fill='y')
     tree.configure(xscrollcommand=vsb.set)
   
     fill_data(tree, df)
     
-    # style = ttk.Style()
-    # style.theme_use("default")
-    # style.map("Treeview")
+    style = ttk.Style()
+    style.theme_use("default")
+    style.map("Treeview")
 
     ws.mainloop()
 
