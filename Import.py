@@ -17,7 +17,7 @@ def load():
 
 def import_data(data):
     db = load_data(database)
-    max_id = db["id"].max() + 1
+    max_id = db['id'].max() + 1
     data['id'] = range(max_id, max_id+len(data))
     result = pd.concat([db, data])
     ab_export.save_data(database, "csv", result)

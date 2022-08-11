@@ -1,6 +1,8 @@
 from ast import Delete
 from json import load
 from turtle import width
+
+from pandas import DataFrame, Series, StringDtype
 import Import as ab_import
 import Export as ab_export
 import Search as ab_search
@@ -39,11 +41,12 @@ def fill_data(tree, df):
 def run_gui():
     def do_command(command, inputValue = ''):
         if (command == 'search'):
-            df = ab_import.load()
-            #column = str(df.columns[1])
-            #s = f'column[1].str.contains("{inputValue}")'
-            #print(s)
-            #df.query(str, engine='python')
+            df = ab_import.load().applymap(str)
+            if len(inputValue):
+                result = Series([],dtype=StringDtype())
+                for column in df.columns:
+                    result = result | df[column].str.contains(inputValue)# if len(result) else df[column].str.contains(inputValue)
+                df = df[result]
             fill_data(tree, df)
         return
 
@@ -62,10 +65,14 @@ def run_gui():
     textSearch.pack(side ='left', padx=10)
     buttonSearch=tk.Button(topFrame, height=1, width=10, text="Поиск", command=lambda: do_command('search', textSearch.get("1.0","end-1c")))
     buttonSearch.pack(side ='left', padx=5)
-    buttonAdd=tk.Button(topFrame, height=1, width=10, text="Добавить", command=lambda: do_add())
+    buttonAdd=tk.Button(topFrame, height=1, width=10, text="Добавить", state = 'disabled', command=lambda: do_add())
     buttonAdd.pack(side ='left', padx=5)
-    buttonRemove=tk.Button(topFrame, height=1, width=10, text="Удалить", command=lambda: do_delete())
+    buttonRemove=tk.Button(topFrame, height=1, width=10, text="Удалить", state = 'disabled', command=lambda: do_delete())
     buttonRemove.pack(side ='left', padx=5)
+    buttonExport=tk.Button(topFrame, height=1, width=10, text="Экспорт", state = 'disabled', command=lambda: do_delete())
+    buttonExport.pack(side ='left', padx=5)
+    buttonImport=tk.Button(topFrame, height=1, width=10, text="Импорт", state = 'disabled', command=lambda: do_delete())
+    buttonImport.pack(side ='left', padx=5)
 
     df = ab_import.load()
     tree = ttk.Treeview(ws, columns=list(df.columns), show='headings', selectmode ='browse')
